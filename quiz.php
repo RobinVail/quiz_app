@@ -70,3 +70,33 @@ $currentQuestion = isset($_SESSION['currentQuestion']) ? $_SESSION['currentQuest
 $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
 $name = isset($_SESSION['name']) ? $_SESSION['name'] : null;
 
+f ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['name'])) {
+        $name = $_POST['name'];
+        $_SESSION['name'] = $name;
+    }
+
+    if (isset($_POST['answer'])) {
+        if ($_POST['answer'] == $questions[$currentQuestion]['correct']) {
+            $score++;
+        }
+    }
+
+    $currentQuestion++;
+    if ($currentQuestion >= $totalQuestions || isset($_POST['end_quiz'])) {
+
+        $stmt = $conn->prepare("INSERT INTO highscores (name, score) VALUES (?, ?)");
+        $stmt->bind_param("si", $name, $score);
+        $stmt->execute();
+        $stmt->close();
+
+
+        $finished = true;
+        session_destroy();
+    } else {
+
+        $_SESSION['currentQuestion'] = $currentQuestion;
+        $_SESSION['score'] = $score;
+    }
+}
+?>
