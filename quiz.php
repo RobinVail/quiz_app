@@ -65,3 +65,8 @@ $questions = [
         "correct" => 1
     ]
 ];
+$totalQuestions = count($questions);
+$currentQuestion = isset($_SESSION['currentQuestion']) ? $_SESSION['currentQuestion'] : 0;
+$score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
+$name = isset($_SESSION['name']) ? $_SESSION['name'] : null;
+
